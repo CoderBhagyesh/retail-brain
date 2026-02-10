@@ -1,0 +1,7 @@
+date,product,sales,price,stock
+2024-01-01,Shampoo,12,5.99,8
+2024-01-02,Shampoo,15,5.99,6
+2024-01-01,Soap,20,1.99,40
+2024-01-02,Soap,18,1.99,35
+2024-01-01,Toothpaste,5,3.49,50
+2024-01-02,Toothpaste,4,3.49,48
