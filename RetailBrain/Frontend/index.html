@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RetailBrain – AI Retail Copilot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <aside class="sidebar p-3">
+      <h4 class="brand">🧠 RetailBrain</h4>
+      <ul class="nav flex-column mt-4">
+        <li class="nav-item"><a class="nav-link active" onclick="showPage('home', this)">Home</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="showPage('dashboard', this)">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="showPage('copilot', this)">AI Copilot</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="showPage('forecast', this)">Forecast</a></li>
+
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-fill p-4">
+      <!-- Home -->
+      <section id="home" class="page">
+        <h2>Upload Sales Data</h2>
+        <div class="card p-4 shadow-sm">
+          <input type="file" id="csvFile" class="form-control mb-3"/>
+          <button class="btn btn-primary" onclick="uploadFile()">Upload</button>
+          <div id="uploadStatus" class="mt-3"></div>
+        </div>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="dashboard" class="page d-none">
+        <h2>📊 Dashboard</h2>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <h6>Total Revenue</h6>
+              <h3 id="totalRevenue">--</h3>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <h6>Top Product</h6>
+              <h3 id="topProduct">--</h3>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="kpi-card shadow-sm">
+              <h6>Slow Mover</h6>
+              <h3 id="slowMover">--</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card p-3 shadow-sm">
+          <h6>Low Stock Products</h6>
+          <ul id="lowStockList"></ul>
+        </div>
+        <button class="btn btn-outline-primary mt-3" onclick="loadDashboard()">Refresh</button>
+      </section>
+
+      <!-- Copilot -->
+      <section id="copilot" class="page d-none">
+        <h2>💬 AI Copilot</h2>
+        <div class="chat-box shadow-sm" id="chatBox"></div>
+        <div class="input-group mt-3">
+          <input type="text" id="chatInput" class="form-control" placeholder="Ask about restocking, promotions..." />
+          <button class="btn btn-primary" onclick="askCopilot()">Ask</button>
+        </div>
+      </section>
+
+      <!-- Forecast -->
+      <section id="forecast" class="page d-none">
+        <h2>🔮 Forecast</h2>
+        <div class="card p-4 shadow-sm">
+          <input class="form-control mb-2" id="productName" placeholder="Product name"/>
+          <input type="number" class="form-control mb-2" id="days" value="7"/>
+          <button class="btn btn-primary" onclick="getForecast()">Get Forecast</button>
+          <pre class="mt-3" id="forecastResult"></pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

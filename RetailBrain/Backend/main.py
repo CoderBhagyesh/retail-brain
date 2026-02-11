@@ -3,9 +3,25 @@ import pandas as pd
 from Services.analytics import get_dashboard_metrics
 from Services.forecasting import get_forecast
 from Services.copilot import chat_with_copilot
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 DATASTORE = {"df": None}
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):
@@ -28,5 +44,19 @@ def forecast(product: str, days: int = 7):
 @app.post("/copilot/chat")
 def copilot_chat(query: str):
     if DATASTORE["df"] is None:
-        return {"error": "No data uploaded"}
-    return chat_with_copilot(DATASTORE["df"], query)
+        return {
+            "answer": "No data uploaded yet. Please upload a CSV file first.",
+            "error": "NO_DATA"
+        }
+
+    result = chat_with_copilot(DATASTORE["df"], query)
+
+    # Ensure frontend contract: always has "answer"
+    if "answer" not in result:
+        return {
+            "answer": "Something went wrong while generating AI response.",
+            "raw": result
+        }
+
+    return result
+
