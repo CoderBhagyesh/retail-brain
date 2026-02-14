@@ -16,10 +16,12 @@ RetailBrain is an AI-powered retail analytics and forecasting platform that help
 
 #### Data Processing
 - `pandas` - Data manipulation and analysis library
+ - `numpy` - Numerical computing (used by forecasting)
 - `python-multipart` - Required for file upload handling in FastAPI
 
 #### AI/ML Integration
 - `openai` - OpenAI Python client (used with Hugging Face router)
+ - `numpy` (listed above) is used by forecasting calculations
 
 #### Configuration
 - `python-dotenv` - Environment variable management
@@ -46,7 +48,7 @@ HF_TOKEN=your_huggingface_token_here
 
 ### Option 1: Using pip
 ```bash
-pip install fastapi uvicorn pandas python-multipart openai python-dotenv streamlit requests
+pip install fastapi uvicorn pandas numpy python-multipart openai python-dotenv requests
 ```
 
 ### Option 2: Using requirements.txt
@@ -55,10 +57,10 @@ Create a `requirements.txt` file with:
 fastapi
 uvicorn
 pandas
+numpy
 python-multipart
 openai
 python-dotenv
-streamlit
 requests
 ```
 

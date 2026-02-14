@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RetailBrain – AI Retail Copilot</title>
+  <title>RetailBrain - AI Retail Copilot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
@@ -10,21 +10,17 @@
 </head>
 <body>
   <div class="d-flex">
-    <!-- Sidebar -->
     <aside class="sidebar p-3">
-      <h4 class="brand">🧠 RetailBrain</h4>
+      <h4 class="brand">RetailBrain</h4>
       <ul class="nav flex-column mt-4">
         <li class="nav-item"><a class="nav-link active" onclick="showPage('home', this)">Home</a></li>
         <li class="nav-item"><a class="nav-link" onclick="showPage('dashboard', this)">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" onclick="showPage('copilot', this)">AI Copilot</a></li>
         <li class="nav-item"><a class="nav-link" onclick="showPage('forecast', this)">Forecast</a></li>
-
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-fill p-4">
-      <!-- Home -->
       <section id="home" class="page">
         <h2>Upload Sales Data</h2>
         <div class="card p-4 shadow-sm">
@@ -34,42 +30,95 @@
         </div>
       </section>
 
-      <!-- Dashboard -->
       <section id="dashboard" class="page d-none">
-        <h2>📊 Dashboard</h2>
+        <div class="dashboard-hero mb-4">
+          <div>
+            <h2 class="mb-1">Performance Dashboard</h2>
+            <p class="mb-0 text-muted">Track sales momentum, leaders, and stock risk in one view.</p>
+          </div>
+          <button class="btn btn-outline-primary" onclick="loadDashboard()">Refresh Data</button>
+        </div>
+
         <div class="row g-3 mb-4">
-          <div class="col-md-4">
-            <div class="kpi-card shadow-sm">
-              <h6>Total Revenue</h6>
-              <h3 id="totalRevenue">--</h3>
+          <div class="col-lg-3 col-md-6">
+            <div class="kpi-card kpi-primary shadow-sm">
+              <p class="kpi-label">Total Revenue</p>
+              <h3 id="totalRevenue" class="kpi-value">--</h3>
+              <small class="text-muted">Overall sales value</small>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-lg-3 col-md-6">
             <div class="kpi-card shadow-sm">
-              <h6>Top Product</h6>
-              <h3 id="topProduct">--</h3>
+              <p class="kpi-label">Units Sold</p>
+              <h3 id="totalUnits" class="kpi-value">--</h3>
+              <small class="text-muted">Total items sold</small>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-lg-3 col-md-6">
             <div class="kpi-card shadow-sm">
-              <h6>Slow Mover</h6>
-              <h3 id="slowMover">--</h3>
+              <p class="kpi-label">Sales Trend</p>
+              <h3 id="salesTrend" class="kpi-value">--</h3>
+              <small class="text-muted">Compared to earlier period</small>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="kpi-card shadow-sm">
+              <p class="kpi-label">Products Tracked</p>
+              <h3 id="productCount" class="kpi-value">--</h3>
+              <small class="text-muted">Unique product count</small>
             </div>
           </div>
         </div>
-        <div class="card p-3 shadow-sm">
-          <h6>Low Stock Products</h6>
-          <ul id="lowStockList"></ul>
+
+        <div class="row g-3 mb-4">
+          <div class="col-lg-6">
+            <div class="dashboard-card shadow-sm h-100">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="mb-0">Product Leaders</h5>
+                <small class="text-muted">Top and slow performers</small>
+              </div>
+              <div class="dashboard-duo">
+                <div class="duo-block">
+                  <small class="text-muted">Top Product</small>
+                  <div id="topProduct" class="duo-title">--</div>
+                  <small id="topProductMeta" class="text-muted">--</small>
+                </div>
+                <div class="duo-block">
+                  <small class="text-muted">Needs Attention</small>
+                  <div id="slowMover" class="duo-title">--</div>
+                  <small id="slowMoverMeta" class="text-muted">--</small>
+                </div>
+              </div>
+              <div class="mt-3">
+                <h6 class="mb-2">Top 5 Products</h6>
+                <div id="topProductsList" class="metric-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="dashboard-card shadow-sm h-100">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="mb-0">Inventory Health</h5>
+                <small id="bestDay" class="text-muted">Best day: --</small>
+              </div>
+              <div class="stock-pill-row mb-3">
+                <div class="stock-pill stock-critical"><span id="criticalStockCount">0</span> Critical</div>
+                <div class="stock-pill stock-warning"><span id="warningStockCount">0</span> Warning</div>
+                <div class="stock-pill stock-healthy"><span id="healthyStockCount">0</span> Healthy</div>
+              </div>
+              <h6 class="mb-2">Low Stock Alerts</h6>
+              <div id="lowStockList" class="metric-list"></div>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-outline-primary mt-3" onclick="loadDashboard()">Refresh</button>
       </section>
 
-      <!-- Copilot -->
       <section id="copilot" class="page d-none">
         <div class="copilot-shell shadow-sm">
           <div class="copilot-header">
             <div>
-              <h2>💬 AI Copilot</h2>
+              <h2>AI Copilot</h2>
               <p class="text-muted mb-0">Ask for restocking plans, pricing suggestions, and sales insights.</p>
             </div>
           </div>
@@ -96,14 +145,41 @@
         </div>
       </section>
 
-      <!-- Forecast -->
       <section id="forecast" class="page d-none">
-        <h2>🔮 Forecast</h2>
-        <div class="card p-4 shadow-sm">
-          <input class="form-control mb-2" id="productName" placeholder="Product name"/>
-          <input type="number" class="form-control mb-2" id="days" value="7"/>
-          <button class="btn btn-primary" onclick="getForecast()">Get Forecast</button>
-          <pre class="mt-3" id="forecastResult"></pre>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="mb-0">Forecast</h2>
+          <small class="text-muted">Short-term demand forecast per product</small>
+        </div>
+
+        <div class="card p-4 shadow-sm forecast-card">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+              <label class="form-label small text-muted">Product</label>
+              <input class="form-control" id="productName" list="productList" placeholder="Select or type product"/>
+              <datalist id="productList"></datalist>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small text-muted">Days to Predict</label>
+              <input type="number" class="form-control" id="days" value="7"/>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label small text-muted">Supplier Delivery Days</label>
+              <input type="number" class="form-control" id="leadTimeDays" value="7"/>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label small text-muted">Safety Level</label>
+              <select class="form-select" id="serviceLevel">
+                <option value="0.9">Standard (90%)</option>
+                <option value="0.95" selected>High (95%)</option>
+                <option value="0.98">Very High (98%)</option>
+                <option value="0.99">Max (99%)</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-primary w-100" onclick="getForecast()">Get Forecast</button>
+            </div>
+          </div>
+          <div class="mt-4" id="forecastResult"></div>
         </div>
       </section>
     </main>

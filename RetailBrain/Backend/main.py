@@ -36,10 +36,26 @@ def dashboard_metrics():
     return get_dashboard_metrics(DATASTORE["df"])
 
 @app.get("/forecast")
-def forecast(product: str, days: int = 7):
+def forecast(
+    product: str,
+    days: int = 7,
+    lead_time_days: int = 7,
+    service_level: float = 0.95,
+):
     if DATASTORE["df"] is None:
         return {"error": "No data uploaded"}
-    return get_forecast(DATASTORE["df"], product, days)
+    return get_forecast(DATASTORE["df"], product, days, lead_time_days, service_level)
+
+@app.get("/products")
+def get_products():
+    if DATASTORE["df"] is None:
+        return {"error": "No data uploaded", "products": []}
+
+    if "product" not in DATASTORE["df"].columns:
+        return {"error": "Column 'product' not found", "products": []}
+
+    products = sorted(DATASTORE["df"]["product"].dropna().astype(str).unique().tolist())
+    return {"products": products}
 
 @app.post("/copilot/chat")
 def copilot_chat(query: str):

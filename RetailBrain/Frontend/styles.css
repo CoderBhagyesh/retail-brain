@@ -24,11 +24,144 @@
   background: white;
   border-radius: 16px;
   padding: 20px;
+  border: 1px solid #edf1f6;
   transition: 0.2s ease;
 }
 
 .kpi-card:hover {
   transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(16, 24, 40, 0.08);
+}
+
+.kpi-primary {
+  background: linear-gradient(135deg, #0d6efd, #3a8bff);
+  color: white;
+}
+
+.kpi-primary .kpi-label,
+.kpi-primary .text-muted {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.kpi-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  color: #6b7280;
+}
+
+.kpi-value {
+  margin-bottom: 0;
+}
+
+.dashboard-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e8eef8;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #f4f9ff 0%, #ffffff 55%, #f6f8ff 100%);
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #edf1f6;
+  padding: 18px;
+}
+
+.dashboard-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.duo-block {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbfdff;
+}
+
+.duo-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #eef2f7;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.metric-item-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.metric-item-meta {
+  color: #6b7280;
+  font-size: 0.86rem;
+}
+
+.stock-pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stock-pill {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stock-pill span {
+  margin-right: 4px;
+}
+
+.stock-critical {
+  color: #9f1239;
+  background: #ffe4e6;
+}
+
+.stock-warning {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.stock-healthy {
+  color: #065f46;
+  background: #d1fae5;
+}
+
+@media (max-width: 768px) {
+  .dashboard-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-duo {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Copilot Chat UI */
@@ -37,7 +170,8 @@
   border-radius: 16px;
   padding: 18px;
   border: 1px solid #e9ecef;
-  min-height: 74vh;
+  min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -50,6 +184,7 @@
 
 .chat-box {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 10px 2px;
   display: flex;
@@ -124,6 +259,11 @@
 .chat-input-wrap .btn {
   border-radius: 10px;
   width: 46px;
+}
+
+#copilot.page {
+  height: calc(100vh - 2rem);
+  overflow: hidden;
 }
 
 /* Pages animation */
