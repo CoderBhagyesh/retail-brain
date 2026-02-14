@@ -1,155 +1,222 @@
-# RetailBrain - Requirements
+# RetailBrain - Requirements Document
 
 ## Project Overview
-RetailBrain is an AI-powered retail analytics and forecasting platform that helps store managers make data-driven decisions through interactive dashboards, sales forecasting, and an AI copilot assistant.
 
-## System Requirements
+RetailBrain is an AI-powered retail analytics and decision support system designed to help store managers optimize inventory, forecast demand, and make data-driven business decisions. The system combines sales analytics, demand forecasting, and an AI copilot to provide actionable insights from retail sales data.
 
-### Python Version
-- Python 3.8 or higher
+## Business Objectives
 
-### Backend Dependencies
+- Enable store managers to make informed inventory and purchasing decisions
+- Reduce stockouts and overstock situations through accurate demand forecasting
+- Provide real-time visibility into sales performance and product trends
+- Offer AI-powered recommendations for restocking, pricing, and sales strategies
+- Minimize manual analysis time through automated insights
 
-#### Core Framework
-- `fastapi` - Modern web framework for building APIs
-- `uvicorn` - ASGI server for running FastAPI applications
+## Target Users
 
-#### Data Processing
-- `pandas` - Data manipulation and analysis library
- - `numpy` - Numerical computing (used by forecasting)
-- `python-multipart` - Required for file upload handling in FastAPI
+- Store managers and retail operations staff
+- Inventory planners and purchasing managers
+- Small to medium retail business owners
+- Retail analysts and decision makers
 
-#### AI/ML Integration
-- `openai` - OpenAI Python client (used with Hugging Face router)
- - `numpy` (listed above) is used by forecasting calculations
+## Functional Requirements
 
-#### Configuration
-- `python-dotenv` - Environment variable management
+### 1. Data Management
 
-#### Frontend (Streamlit)
-- `streamlit` - Web application framework for the UI
-- `requests` - HTTP library for backend API calls
+#### 1.1 CSV File Upload
+- Users must be able to upload sales data in CSV format
+- System must validate and parse CSV files containing: date, product, sales, price, stock
+- System must provide feedback on successful upload including row count
+- System must handle missing or invalid data gracefully
 
-## Environment Variables
+#### 1.2 Data Storage
+- System must maintain uploaded data in memory for the current session
+- System must support data replacement when new files are uploaded
 
-Create a `.env` file in the project root with the following:
+### 2. Analytics Dashboard
 
-```
-HF_TOKEN=your_huggingface_token_here
-```
+#### 2.1 Overview Metrics
+- Display total revenue across all products
+- Display total units sold
+- Display average unit price
+- Display total number of unique products
+- Calculate and display sales trend percentage (comparing first half vs second half of data period)
 
-### Getting a Hugging Face Token
-1. Sign up at https://huggingface.co
-2. Go to Settings → Access Tokens
-3. Create a new token with read permissions
-4. Copy the token to your `.env` file
+#### 2.2 Product Performance
+- Identify and display top-performing product by units sold
+- Identify and display slowest-moving product
+- Show top 5 products with units sold and revenue
+- Display product-specific metrics: units sold, revenue, current stock level
 
-## Installation
+#### 2.3 Inventory Management
+- Categorize stock levels: Critical (<10 units), Warning (10-24 units), Healthy (≥25 units)
+- Display count of products in each stock health category
+- Generate alerts for low stock items (below 10 units)
+- Show current stock levels for all products
 
-### Option 1: Using pip
-```bash
-pip install fastapi uvicorn pandas numpy python-multipart openai python-dotenv requests
-```
+#### 2.4 Sales Insights
+- Identify best sales day with date and revenue
+- Support manual dashboard refresh
 
-### Option 2: Using requirements.txt
-Create a `requirements.txt` file with:
-```
-fastapi
-uvicorn
-pandas
-numpy
-python-multipart
-openai
-python-dotenv
-requests
-```
+### 3. Demand Forecasting
 
-Then install:
-```bash
-pip install -r requirements.txt
-```
+#### 3.1 Forecast Configuration
+- Allow product selection from available products
+- Support forecast period configuration (1-90 days)
+- Support supplier lead time configuration (1-90 days)
+- Support service level selection: 90%, 95%, 98%, 99%
 
-## Running the Application
+#### 3.2 Forecast Calculation
+- Generate daily demand forecasts using statistical models
+- Automatically select best forecasting model based on historical accuracy:
+  - Simple mean
+  - Weighted moving average
+  - Trend regression
+- Provide forecast confidence intervals (lower and upper bounds)
+- Calculate forecast accuracy metrics (MAE, MAPE)
 
-### Start Backend Server
-```bash
-cd RetailBrain/Backend
-uvicorn main:app --reload --port 8000
-```
+#### 3.3 Inventory Recommendations
+- Calculate average daily demand
+- Calculate reorder point based on lead time and safety stock
+- Calculate suggested order quantity
+- Estimate days of inventory cover
+- Assess stockout risk level: Low, Medium, High
+- Calculate safety stock based on service level and demand variability
 
-### Start Frontend (Streamlit)
-```bash
-cd RetailBrain/Frontend
-streamlit run app.py
-```
+### 4. AI Copilot
 
-### Alternative Frontend (HTML/JS)
-Open `RetailBrain/Frontend/index.html` in a browser using a local server:
-```bash
-cd RetailBrain/Frontend
-python -m http.server 5500
-```
+#### 4.1 Natural Language Query
+- Accept natural language questions about sales data
+- Support queries about products, sales trends, inventory, and recommendations
+- Provide conversational interface with chat history
 
-## API Endpoints
+#### 4.2 Context-Aware Responses
+- Analyze full dataset to provide relevant context
+- Use intelligent row retrieval to stay within token limits
+- Ground responses in actual data with specific numbers and insights
+- Provide actionable recommendations in bullet point format
 
-### POST /upload
-Upload CSV file with sales data
+#### 4.3 Business Intelligence
+- Summarize key business metrics (revenue, top products, slow movers, low stock)
+- Answer questions about specific products or categories
+- Provide restocking recommendations
+- Suggest pricing strategies
+- Identify sales opportunities
 
-### GET /dashboard/metrics
-Retrieve dashboard analytics (revenue, top products, low stock)
+#### 4.4 AI Integration
+- Integrate with Hugging Face inference API
+- Use Kimi-K2-Instruct model for response generation
+- Handle API failures gracefully with fallback responses
+- Maintain conversation context
 
-### GET /forecast
-Get sales forecast for a specific product
-- Parameters: `product` (string), `days` (int, default: 7)
+### 5. User Interface
 
-### POST /copilot/chat
-Chat with AI copilot for business insights
-- Parameters: `query` (string)
+#### 5.1 Navigation
+- Provide sidebar navigation with sections: Home, Dashboard, AI Copilot, Forecast
+- Support single-page application navigation
+- Highlight active section
 
-## Data Format
+#### 5.2 Responsive Design
+- Support desktop and tablet viewports
+- Use responsive grid layouts
+- Ensure readability across screen sizes
 
-The application expects CSV files with the following columns:
-- `date` - Transaction date
-- `product` - Product name
-- `sales` - Number of units sold
-- `price` - Unit price
-- `stock` - Current stock level
+#### 5.3 Visual Design
+- Use modern, clean interface with card-based layouts
+- Implement color-coded indicators for trends and risk levels
+- Use icons for visual clarity
+- Provide loading states and error messages
 
-Sample data is provided in `RetailBrain/Data/sample_sales.csv`
+## Non-Functional Requirements
 
-## CORS Configuration
+### 6. Performance
 
-The backend is configured to accept requests from:
-- http://127.0.0.1:5500
-- http://localhost:5500
+- Dashboard metrics should load within 2 seconds for datasets up to 10,000 rows
+- Forecast calculations should complete within 3 seconds
+- AI copilot responses should return within 10 seconds
+- Support concurrent user sessions
 
-Modify `main.py` to add additional origins if needed.
+### 7. Reliability
 
-## AI Model
+- Handle missing or malformed data without crashing
+- Provide meaningful error messages for all failure scenarios
+- Validate all user inputs
+- Gracefully degrade when AI service is unavailable
 
-The copilot uses Hugging Face's router with the `moonshotai/Kimi-K2-Instruct-0905` model. The system includes fallback handling if the AI service is unavailable.
+### 8. Security
 
-## Features
+- Use CORS middleware to restrict API access to authorized origins
+- Validate file uploads to prevent malicious files
+- Sanitize user inputs to prevent injection attacks
+- Store API keys securely in environment variables
 
-1. **Dashboard Analytics**
-   - Total revenue calculation
-   - Top-selling product identification
-   - Slow-moving product detection
-   - Low stock alerts (threshold: < 10 units)
+### 9. Usability
 
-2. **Sales Forecasting**
-   - 7-day moving average prediction
-   - Customizable forecast period
-   - Product-specific forecasts
+- Provide clear labels and instructions for all inputs
+- Display helpful error messages with guidance
+- Use consistent terminology throughout the interface
+- Minimize clicks required for common tasks
 
-3. **AI Copilot**
-   - Natural language queries
-   - Actionable business recommendations
-   - Context-aware responses based on current data
+### 10. Maintainability
 
-## Development Notes
+- Use modular service architecture for backend logic
+- Separate concerns: analytics, forecasting, AI copilot
+- Follow consistent code formatting and naming conventions
+- Include inline comments for complex logic
 
-- The backend uses an in-memory datastore (`DATASTORE`) for uploaded CSV data
-- Data persists only during the server session
-- For production, consider implementing persistent storage (database)
-- The AI copilot requires a valid Hugging Face token to function
+## Technical Requirements
+
+### 11. Backend Stack
+
+- Python 3.8+
+- FastAPI web framework
+- Pandas for data manipulation
+- NumPy for numerical computations
+- OpenAI SDK for AI integration
+- Python-dotenv for environment configuration
+
+### 12. Frontend Stack
+
+- HTML5, CSS3, JavaScript (ES6+)
+- Bootstrap 5.3+ for UI components
+- Bootstrap Icons for iconography
+- Vanilla JavaScript (no framework dependencies)
+
+### 13. API Endpoints
+
+- POST /upload - Upload CSV file
+- GET /dashboard/metrics - Retrieve dashboard analytics
+- GET /forecast - Generate demand forecast
+- GET /products - List available products
+- POST /copilot/chat - Send query to AI copilot
+
+### 14. Data Format
+
+CSV files must contain the following columns:
+- date: Date in YYYY-MM-DD format
+- product: Product name (string)
+- sales: Units sold (numeric)
+- price: Unit price (numeric)
+- stock: Current stock level (numeric)
+
+## Constraints and Assumptions
+
+- System operates on single-user sessions (no multi-user data isolation)
+- Data is stored in memory only (no persistent database)
+- Historical data must span at least 5 days for meaningful forecasts
+- AI copilot requires valid Hugging Face API token
+- System assumes daily sales granularity
+- Forecasting models assume relatively stable demand patterns
+
+## Future Enhancements
+
+- Multi-user support with authentication
+- Persistent database storage
+- Export functionality for reports and forecasts
+- Advanced forecasting models (ARIMA, Prophet)
+- Real-time data integration
+- Mobile application
+- Email alerts for critical stock levels
+- Multi-store support
+- Category-level analytics
+- Seasonal trend detection
