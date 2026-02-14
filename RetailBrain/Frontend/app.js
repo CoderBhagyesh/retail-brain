@@ -38,25 +38,44 @@ async function loadDashboard() {
   });
 }
 
-async function askCopilot() {
-  const input = document.getElementById("chatInput");
+function appendMessage(role, message) {
   const chatBox = document.getElementById("chatBox");
 
-  const userMsg = document.createElement("div");
-  userMsg.className = "chat-msg user";
-  userMsg.innerText = input.value;
-  chatBox.appendChild(userMsg);
+  const wrapper = document.createElement("div");
+  wrapper.className = `chat ${role}`;
 
-  const res = await fetch(`${BACKEND}/copilot/chat?query=${encodeURIComponent(input.value)}`, { method: "POST" });
-  const data = await res.json();
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.innerHTML = role === "user"
+    ? '<i class="bi bi-person-fill"></i>'
+    : '<i class="bi bi-stars"></i>';
 
-  const botMsg = document.createElement("div");
-  botMsg.className = "chat-msg bot";
-  botMsg.innerText = data.answer;
-  chatBox.appendChild(botMsg);
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerText = message;
 
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(bubble);
+  chatBox.appendChild(wrapper);
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function askCopilot() {
+  const input = document.getElementById("chatInput");
+  const query = input.value.trim();
+
+  if (!query) return;
+
+  appendMessage("user", query);
   input.value = "";
+
+  try {
+    const res = await fetch(`${BACKEND}/copilot/chat?query=${encodeURIComponent(query)}`, { method: "POST" });
+    const data = await res.json();
+    appendMessage("assistant", data.answer || "I could not generate a response.");
+  } catch (error) {
+    appendMessage("assistant", "Unable to reach the copilot service right now. Please try again.");
+  }
 }
 
 async function getForecast() {
