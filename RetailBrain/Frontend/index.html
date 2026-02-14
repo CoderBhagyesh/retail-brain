@@ -66,11 +66,33 @@
 
       <!-- Copilot -->
       <section id="copilot" class="page d-none">
-        <h2>💬 AI Copilot</h2>
-        <div class="chat-box shadow-sm" id="chatBox"></div>
-        <div class="input-group mt-3">
-          <input type="text" id="chatInput" class="form-control" placeholder="Ask about restocking, promotions..." />
-          <button class="btn btn-primary" onclick="askCopilot()">Ask</button>
+        <div class="copilot-shell shadow-sm">
+          <div class="copilot-header">
+            <div>
+              <h2>💬 AI Copilot</h2>
+              <p class="text-muted mb-0">Ask for restocking plans, pricing suggestions, and sales insights.</p>
+            </div>
+          </div>
+
+          <div class="chat-box" id="chatBox">
+            <div class="chat assistant">
+              <div class="avatar"><i class="bi bi-stars"></i></div>
+              <div class="bubble">Hi! I am your RetailBrain Copilot. What would you like to analyze today?</div>
+            </div>
+          </div>
+
+          <div class="chat-input-wrap">
+            <input
+              type="text"
+              id="chatInput"
+              class="form-control"
+              placeholder="Message RetailBrain Copilot..."
+              onkeydown="if(event.key==='Enter'){askCopilot();}"
+            />
+            <button class="btn btn-primary" onclick="askCopilot()">
+              <i class="bi bi-send"></i>
+            </button>
+          </div>
         </div>
       </section>
 
